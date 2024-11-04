@@ -14,7 +14,7 @@ from firebase_admin import credentials, db
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # Inicializar Firebase
-cred = credentials.Certificate("credential.json")  # Reemplaza con la ruta de tu archivo JSON de credenciales
+cred = credentials.Certificate("ruta/a/tu/archivo/credenciales.json")  # Reemplaza con la ruta de tu archivo JSON de credenciales
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://hydrometra-3269a-default-rtdb.firebaseio.com/'
 })
@@ -65,7 +65,7 @@ class OCRApp:
         if self.running:
             self.scan_full_screen()
             # Llamar a la función de nuevo después de 1 segundo
-            self.root.after(500, self.auto_scan)
+            self.root.after(1000, self.auto_scan)
 
     def extract_text(self, img):
         # Convertir la imagen a escala de grises
@@ -78,7 +78,7 @@ class OCRApp:
 
     def extract_voltage_current(self, text):
         # Buscar los valores de voltaje y corriente con expresiones regulares
-        pattern = re.search(r'Vv A\s*([\d\.]+)\s+([\d\.]+)', text)
+        pattern = re.search(r'Charge: ON Discharge: ON Balance: OF!\s*<\s*([\d\.]+)"\s+([\d\.]+)°', text)
         if pattern:
             voltaje = float(pattern.group(1))  # Valor del voltaje
             amperios = float(pattern.group(2))  # Valor del amperaje que está justo después del voltaje
